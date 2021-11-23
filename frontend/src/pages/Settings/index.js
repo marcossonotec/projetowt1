@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import openSocket from "socket.io-client";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -11,6 +11,10 @@ import { toast } from "react-toastify";
 import api from "../../services/api";
 import { i18n } from "../../translate/i18n.js";
 import toastError from "../../errors/toastError";
+import { AuthContext } from "../../context/Auth/AuthContext";
+
+const oneTab = require('../../assets/onetab.jpg');
+const twoTab = require('../../assets/twotab.jpg');
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -31,12 +35,22 @@ const useStyles = makeStyles(theme => ({
 	margin: {
 		margin: theme.spacing(1),
 	},
+	
+	mainPaper: {
+    flex: 1,
+    padding: theme.spacing(1),
+    overflowY: "scroll",
+    ...theme.scrollbarStyles,
+  },
 }));
 
 const Settings = () => {
 	const classes = useStyles();
-
+	const { user } = useContext(AuthContext);
 	const [settings, setSettings] = useState([]);
+	const [settingsUser, setSettingsUser] = useState(user.modeTabTickets);
+	
+	const userId = user.id;	
 
 	useEffect(() => {
 		const fetchSession = async () => {
@@ -48,8 +62,9 @@ const Settings = () => {
 			}
 		};
 		fetchSession();
+		
 	}, []);
-
+	
 	useEffect(() => {
 		const socket = openSocket(process.env.REACT_APP_BACKEND_URL);
 
@@ -82,6 +97,18 @@ const Settings = () => {
 			toastError(err);
 		}
 	};
+	
+	const handleChangeTicketList = async e => {
+		setSettingsUser(e.target.value);
+		const userData = { modeTabTickets: e.target.value };
+		try {
+			await api.put(`/users/${userId}`, userData);
+			toast.success("Informação Salva");
+		} catch (err) {
+			toastError(err);
+		}
+	};
+	
 
 	const getSettingValue = key => {
 		const { value } = settings.find(s => s.key === key);
@@ -118,6 +145,59 @@ const Settings = () => {
 						</option>
 					</Select>
 				</Paper>
+				<Paper className={classes.paper}>
+					<Typography variant="body1">
+						{i18n.t("settings.settings.CheckMsgIsGroup.name")}
+					</Typography>
+					<Select
+						margin="dense"
+						variant="outlined"
+						native
+						id="CheckMsgIsGroup-setting"
+						name="CheckMsgIsGroup"
+						value={
+							settings && settings.length > 0 && getSettingValue("CheckMsgIsGroup")
+						}
+						className={classes.settingOption}
+						onChange={handleChangeSetting}
+					>
+						<option value="enabled">
+							{i18n.t("settings.settings.CheckMsgIsGroup.options.enabled")}
+						</option>
+						<option value="disabled">
+							{i18n.t("settings.settings.CheckMsgIsGroup.options.disabled")}
+						</option>
+					</Select>
+				</Paper>
+				  <Paper className={classes.mainPaper} variant="outlined">
+					<Typography variant="h6">
+						{i18n.t("Modo de Exibição dos Tickets")}
+					</Typography>
+					<Typography component="div">
+						<label>
+							<input
+								type="radio"
+								name="site_name" 
+								value="oneTab"
+								onChange={handleChangeTicketList}
+								checked={settingsUser === "oneTab"}
+							/> 
+							<img src={oneTab} width="170" height="170"/>
+						</label>
+						<label>
+							<input
+								type="radio"
+								name="site_name" 
+								value="twoTab"
+								onChange={handleChangeTicketList}
+								checked={settingsUser === "twoTab"}
+							/> 
+							<img src={twoTab} width="170" height="170"/>
+						</label>
+					  </Typography>
+					
+				</Paper>
+				
 			</Container>
 		</div>
 	);

@@ -66,13 +66,16 @@ const Login = () => {
     handleLogin(user);
   };
 
+  const logo = require('../../assets/botmais2-bg.png');
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
+        {/*<Avatar className={classes.avatar}>
           <LockOutlinedIcon />
-        </Avatar>
+        </Avatar>*/}
+        <img src={logo} width="200"/>
         <Typography component="h1" variant="h5">
           {i18n.t("login.title")}
         </Typography>
