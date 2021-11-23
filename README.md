@@ -6,126 +6,47 @@
 
 # WhaTicket
 
-**NOTE**: The new version of whatsapp-web.js required Node 14. Upgrade your installations to keep using it.
+** NOTA **: A nova versão do whatsapp-web.js requer o Nó 14. Atualize suas instalações para continuar usando.
 
-A _very simple_ Ticket System based on WhatsApp messages.
+Um sistema de tickets _muito simples_ baseado em mensagens do WhatsApp.
 
-Backend uses [whatsapp-web.js](https://github.com/pedroslopez/whatsapp-web.js) to receive and send WhatsApp messages, create tickets from them and store all in a MySQL database.
+O backend usa [whatsapp-web.js] (https://github.com/pedroslopez/whatsapp-web.js) para receber e enviar mensagens WhatsApp, criar tíquetes a partir delas e armazenar tudo em um banco de dados MySQL.
 
-Frontend is a full-featured multi-user _chat app_ bootstrapped with react-create-app and Material UI, that comunicates with backend using REST API and Websockets. It allows you to interact with contacts, tickets, send and receive WhatsApp messages.
+O frontend é um _chat app_ multiusuário com recursos completos, inicializado com react-create-app e Material UI, que se comunica com o backend usando REST API e Websockets. Ele permite que você interaja com contatos, tickets, envie e receba mensagens do WhatsApp.
 
-**NOTE**: I can't guarantee you will not be blocked by using this method, although it has worked for me. WhatsApp does not allow bots or unofficial clients on their platform, so this shouldn't be considered totally safe.
+** NOTA **: Não posso garantir que você não será bloqueado com esse método, embora tenha funcionado para mim. O WhatsApp não permite bots ou clientes não oficiais em sua plataforma, então isso não deve ser considerado totalmente seguro.
 
-## Motivation
+## Motivação
 
-I'm a SysAdmin, and in my daily work, I do a lot of support through WhatsApp. Since WhatsApp Web doesn't allow multiple users, and 90% of our tickets comes from this channel, we created this to share same whatsapp account cross our team.
+Sou um SysAdmin, e no meu trabalho diário, dou muito suporte através do WhatsApp. Como o WhatsApp Web não permite vários usuários, e 90% dos nossos ingressos vêm deste canal, criamos este para compartilhar a mesma conta do WhatsApp entre nossa equipe.
 
-## How it works?
+## Como funciona?
 
-On every new message received in an associated WhatsApp, a new Ticket is created. Then, this ticket can be reached in a _queue_ on _Tickets_ page, where you can assign ticket to your yourself by _aceppting_ it, respond ticket message and eventually _resolve_ it.
+A cada nova mensagem recebida em um WhatsApp associado, um novo Ticket é criado. Então, este tíquete pode ser acessado em uma _fila_ na página _Tiquetes_, onde você pode atribuir um tíquete a você mesmo, _aceptando-o_, responder à mensagem do tíquete e, eventualmente, _resolvê-lo_.
 
-Subsequent messages from same contact will be related to first **open/pending** ticket found.
+As mensagens subsequentes do mesmo contato serão relacionadas ao primeiro tíquete ** aberto / pendente ** encontrado.
 
-If a contact sent a new message in less than 2 hours interval, and there is no ticket from this contact with **pending/open** status, the newest **closed** ticket will be reopen, instead of creating a new one.
+Se um contato enviar uma nova mensagem em menos de 2 horas de intervalo e não houver nenhum tíquete desse contato com o status ** pendente / aberto **, o tíquete ** fechado ** mais recente será reaberto, em vez de criar um novo .
 
-## Screenshots
+## Capturas de tela
 
 ![](https://github.com/canove/whaticket/raw/master/images/whaticket-queues.gif)
 <img src="https://raw.githubusercontent.com/canove/whaticket/master/images/chat2.png" width="350"> <img src="https://raw.githubusercontent.com/canove/whaticket/master/images/chat3.png" width="350"> <img src="https://raw.githubusercontent.com/canove/whaticket/master/images/multiple-whatsapps2.png" width="350"> <img src="https://raw.githubusercontent.com/canove/whaticket/master/images/contacts1.png" width="350">
 
-## Features
+## Recursos
 
-- Have multiple users chating in same WhatsApp Number ✅
-- Connect to multiple WhatsApp accounts and receive all messages in one place ✅ 🆕
-- Create and chat with new contacts without touching cellphone ✅
-- Send and receive message ✅
-- Send media (images/audio/documents) ✅
-- Receive media (images/audio/video/documents) ✅
+- Faça com que vários usuários conversem no mesmo número do WhatsApp ✅
+- Conecte-se a várias contas do WhatsApp e receba todas as mensagens em um só lugar ✅ 🆕
+- Crie e converse com novos contatos sem tocar no celular ✅
+- Envie e receba mensagem ✅
+- Enviar mídia (imagens / áudio / documentos) ✅
+- Receber mídia (imagens / áudio / vídeo / documentos) ✅
 
-## Installation and Usage (Linux Ubuntu - Development)
 
-Create Mysql Database using docker:
-_Note_: change MYSQL_DATABASE, MYSQL_PASSWORD, MYSQL_USER and MYSQL_ROOT_PASSWORD.
 
-```bash
-docker run --name whaticketdb -e MYSQL_ROOT_PASSWORD=strongpassword -e MYSQL_DATABASE=whaticket -e MYSQL_USER=whaticket -e MYSQL_PASSWORD=whaticket --restart always -p 3306:3306 -d mariadb:latest --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
-```
+## Implantação de produção básica (Ubuntu 18.04 VPS)
 
-Install puppeteer dependencies:
-
-```bash
-sudo apt-get install -y libxshmfence-dev libgbm-dev wget unzip fontconfig locales gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils
-```
-
-Clone this repo
-
-```bash
-git clone https://github.com/canove/whaticket/ whaticket
-```
-
-Go to backend folder and create .env file:
-
-```bash
-cp .env.example .env
-nano .env
-```
-
-Fill `.env` file with environment variables:
-
-```bash
-NODE_ENV=DEVELOPMENT      #it helps on debugging
-BACKEND_URL=http://localhost
-FRONTEND_URL=https://localhost:3000
-PROXY_PORT=8080
-PORT=8080
-
-DB_HOST=                  #DB host IP, usually localhost
-DB_DIALECT=
-DB_USER=
-DB_PASS=
-DB_NAME=
-
-JWT_SECRET=3123123213123
-JWT_REFRESH_SECRET=75756756756
-```
-
-Install backend dependencies, build app, run migrations and seeds:
-
-```bash
-npm install
-npm run build
-npx sequelize db:migrate
-npx sequelize db:seed:all
-```
-
-Start backend:
-
-```bash
-npm start
-```
-
-Open a second terminal, go to frontend folder and create .env file:
-
-```bash
-nano .env
-REACT_APP_BACKEND_URL = http://localhost:8080/ # Your previous configured backend app URL.
-```
-
-Start frontend app:
-
-```bash
-npm start
-```
-
-- Go to http://your_server_ip:3000/signup
-- Create an user and login with it.
-- On the sidebard, go to _Connections_ page and create your first WhatsApp connection.
-- Wait for QR CODE button to appear, click it and read qr code.
-- Done. Every message received by your synced WhatsApp number will appear in Tickets List.
-
-## Basic production deployment (Ubuntu 18.04 VPS)
-
-All instructions below assumes you are NOT running as root, since it will give an error in puppeteer. So let's start creating a new user and granting sudo privileges to it:
+Todas as instruções abaixo presumem que você NÃO está executando como root, já que resultará em um erro no titereiro. Então, vamos começar a criar um novo usuário e conceder privilégios sudo a ele:
 
 ```bash
 adduser deploy
