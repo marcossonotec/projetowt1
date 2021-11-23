@@ -9,6 +9,7 @@ interface UserData {
   name?: string;
   profile?: string;
   queueIds?: number[];
+  modeTabTickets?: string;
 }
 
 interface Request {
@@ -36,7 +37,7 @@ const UpdateUserService = async ({
     password: Yup.string()
   });
 
-  const { email, password, profile, name, queueIds = [] } = userData;
+  const { email, password, profile, name, queueIds = [], modeTabTickets } = userData;
 
   try {
     await schema.validate({ email, password, profile, name });
@@ -48,7 +49,8 @@ const UpdateUserService = async ({
     email,
     password,
     profile,
-    name
+    name,
+	modeTabTickets
   });
 
   await user.$set("queues", queueIds);
