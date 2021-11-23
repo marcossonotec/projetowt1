@@ -6,7 +6,7 @@
 
 # WhaTicket
 
-** NOTA **: A nova versão do whatsapp-web.js requer o Nó 14. Atualize suas instalações para continuar usando.
+** NOTA **: A nova versão do whatsapp-web.js requer o Node 14. Atualize suas instalações para continuar usando.
 
 Um sistema de tickets _muito simples_ baseado em mensagens do WhatsApp.
 
