@@ -31,7 +31,7 @@ Se um contato enviar uma nova mensagem em menos de 2 horas de intervalo e não h
 ## Capturas de tela
 
 ![](https://github.com/canove/whaticket/raw/master/images/whaticket-queues.gif)
-<img src="https://raw.githubusercontent.com/canove/whaticket/master/images/chat2.png" width="350"> <img src="https://raw.githubusercontent.com/canove/whaticket/master/images/chat3.png" width="350"> <img src="https://raw.githubusercontent.com/canove/whaticket/master/images/multiple-whatsapps2.png" width="350"> <img src="https://raw.githubusercontent.com/canove/whaticket/master/images/contacts1.png" width="350">
+
 
 ## Recursos
 
@@ -59,7 +59,7 @@ Now we can login with this new user:
 su deploy
 ```
 
-You'll need two subdomains forwarding to yours VPS ip to follow these instructions. We'll use `myapp.mydomain.com` to frontend and `api.mydomain.com` to backend in the following example.
+Você precisará de dois subdomínios encaminhados para seu ip VPS para seguir estas instruções. Usaremos `myapp.mydomain.com` para frontend e` api.mydomain.com` para backend no exemplo a seguir.
 
 Update all system packages:
 
@@ -100,14 +100,14 @@ Clone this repository:
 
 ```bash
 cd ~
-git clone https://github.com/canove/whaticket whaticket
+git clone https://github.com/marcossonotec/projetowt1.git
 ```
 
 Create backend .env file and fill with details:
 
 ```bash
-cp whaticket/backend/.env.example whaticket/backend/.env
-nano whaticket/backend/.env
+cp projetowt1/backend/.env.example projetowt1/backend/.env
+nano projetowt1/backend/.env
 ```
 
 ```bash
@@ -136,7 +136,7 @@ sudo apt-get install -y libxshmfence-dev libgbm-dev wget unzip fontconfig locale
 Install backend dependencies, build app, run migrations and seeds:
 
 ```bash
-cd whaticket/backend
+cd projetowt1/backend
 npm install
 npm run build
 npx sequelize db:migrate
@@ -149,7 +149,7 @@ Install pm2 **with sudo**, and start backend with it:
 
 ```bash
 sudo npm install -g pm2
-pm2 start dist/server.js --name whaticket-backend
+pm2 start dist/server.js --name projetowt1-backend
 ```
 
 Make pm2 auto start afeter reboot:
@@ -186,7 +186,7 @@ npm run build
 Start frontend with pm2, and save pm2 process list to start automatically after reboot:
 
 ```bash
-pm2 start server.js --name whaticket-frontend
+pm2 start server.js --name projetowt1-frontend
 pm2 save
 ```
 
@@ -218,7 +218,7 @@ sudo rm /etc/nginx/sites-enabled/default
 Create a new nginx site to frontend app:
 
 ```bash
-sudo nano /etc/nginx/sites-available/whaticket-frontend
+sudo nano /etc/nginx/sites-available/projetowt1-frontend
 ```
 
 Edit and fill it with this information, changing `server_name` to yours equivalent to `myapp.mydomain.com`:
@@ -244,8 +244,8 @@ server {
 Create another one to backend api, changing `server_name` to yours equivalent to `api.mydomain.com`, and `proxy_pass` to your localhost backend node server URL:
 
 ```bash
-sudo cp /etc/nginx/sites-available/whaticket-frontend /etc/nginx/sites-available/whaticket-backend
-sudo nano /etc/nginx/sites-available/whaticket-backend
+sudo cp /etc/nginx/sites-available/projetowt1-frontend /etc/nginx/sites-available/projetowt1-backend
+sudo nano /etc/nginx/sites-available/projetowt1-backend
 ```
 
 ```bash
@@ -261,8 +261,8 @@ server {
 Create a symbolic links to enalbe nginx sites:
 
 ```bash
-sudo ln -s /etc/nginx/sites-available/whaticket-frontend /etc/nginx/sites-enabled
-sudo ln -s /etc/nginx/sites-available/whaticket-backend /etc/nginx/sites-enabled
+sudo ln -s /etc/nginx/sites-available/projetowt1-frontend /etc/nginx/sites-enabled
+sudo ln -s /etc/nginx/sites-available/projetowt1-backend /etc/nginx/sites-enabled
 ```
 
 By default, nginx limit body size to 1MB, what isn't enough to some media uploads. Lets change it to 20MB adding a new line to config file:
