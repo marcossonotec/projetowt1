@@ -66,13 +66,13 @@ const Login = () => {
     handleLogin(user);
   };
 
-  const logo = require('../../assets/botmais2-bg.png');
+    const logo = require('../../assets/botmais2-bg.png');
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        {/*<Avatar className={classes.avatar}>
+       {/*<Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>*/}
         <img src={logo} width="200"/>

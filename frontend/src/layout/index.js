@@ -25,8 +25,6 @@ import { AuthContext } from "../context/Auth/AuthContext";
 import BackdropLoading from "../components/BackdropLoading";
 import { i18n } from "../translate/i18n";
 
-const logo = require('../../assets/botmais2-bg.png');
-
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -40,11 +38,6 @@ const useStyles = makeStyles((theme) => ({
 
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
-  },
-  logonmarca: {
-    marginLeft: "10%",
-    marginTop: "10%",
-    width: "52%",
   },
   toolbarIcon: {
     display: "flex",
@@ -189,7 +182,6 @@ const LoggedInLayout = ({ children }) => {
           </IconButton>
         </div>
         <Divider />
-        <img src={logo} width="150"/>
         <List>
           <MainListItems drawerClose={drawerClose} />
         </List>
