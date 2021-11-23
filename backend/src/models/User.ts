@@ -40,6 +40,9 @@ class User extends Model<User> {
   @Default(0)
   @Column
   tokenVersion: number;
+  
+  @Column({ defaultValue: "oneTab" })
+  modeTabTickets: string;
 
   @Default("admin")
   @Column
